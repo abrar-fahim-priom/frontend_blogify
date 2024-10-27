@@ -187,7 +187,7 @@ export default function CommentSection({ singleBlog, setCommentLength }) {
                 </div>
 
                 {comment?.author?.id === auth?.user?.id && (
-                  <button onClick={() => handleDeleteComment(comment?.id)}>
+                  <button onClick={() => handleDeleteComment(comment?._id)}>
                     {" "}
                     <img src={DeleteIcon} alt="" />{" "}
                   </button>

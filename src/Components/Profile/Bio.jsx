@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProfile } from "../../Hooks/useProfile";
 import { actions } from "../../actions/index.js";
 import { api } from "../../api/index.js";
@@ -8,10 +8,13 @@ import saveIcon from "../../assets/icons/share.svg";
 export default function Bio({ bioState, user }) {
   const { state, dispatch } = useProfile();
   const [editMode, setEditMode] = useState(false);
-  console.log(bioState);
+  // console.log(bioState);
   const [bio, setBio] = useState(bioState);
 
-  console.log(bio);
+  useEffect(() => {
+    setBio(bioState);
+    // console.log(bioState); // Logs bioState correctly
+  }, [bioState]);
 
   const handleBioEdit = async () => {
     dispatch({ type: actions.profile.DATA_FETCHING });
@@ -26,7 +29,7 @@ export default function Bio({ bioState, user }) {
       );
 
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         dispatch({
           type: actions.profile.USER_DATA_EDITED,
           data: response.data,
@@ -42,7 +45,7 @@ export default function Bio({ bioState, user }) {
   };
 
   const handleEditClick = () => {
-    console.log("Edit button clicked");
+    // console.log("Edit button clicked");
     setEditMode(true);
   };
 

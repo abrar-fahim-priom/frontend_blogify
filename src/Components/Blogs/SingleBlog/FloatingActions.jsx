@@ -24,10 +24,15 @@ export default function FloatingActions({
   console.log(state.favourites);
 
   useEffect(() => {
+    console.log(auth?.user?.id);
     if (singleBlog?.likes && auth?.user?.id) {
-      const isLiked = singleBlog.likes.some((like) => like.id === auth.user.id);
+      console.log(singleBlog?.likes); // THIS PRINTS['66c2f6630aad847b524a01c0']
+
+      console.log(auth?.user?.id); // THIS PRINTS 66c2f6630aad847b524a01c0   (NO COLLON)
+      const isLiked = singleBlog.likes.includes(auth.user.id);
       setLiked(isLiked);
     }
+
     setLikeLength(singleBlog?.likes?.length || 0);
 
     if (state?.favourites && singleBlog?.id) {
@@ -44,8 +49,11 @@ export default function FloatingActions({
         `${import.meta.env.VITE_SERVER_BASE_URL}/blogs/${singleBlog.id}/like`
       );
 
+      console.log(singleBlog);
       if (response.status === 200) {
         const { isLiked, likes } = response.data;
+        console.log(response.data.likes);
+
         setLiked(isLiked);
         setLikeLength(likes.length); // Update the like count based on the response
       }

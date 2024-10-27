@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const { api } = useAxios();
   const { auth } = useAuth();
   const { authorId, setAuthorId } = useAuthor(); // Get authorId from context
+  console.log(auth);
 
   const profileId = authorId || auth?.user?.id; // Determine the profile ID to fetch
 

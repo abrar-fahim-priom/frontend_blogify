@@ -1,22 +1,43 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth";
 import { useProfile } from "../Hooks/useProfile";
+import { actions } from "../actions";
 import search from "../assets/icons/search.svg";
 import logo from "../assets/logo.svg";
 
 export default function Header() {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
-  const { state } = useProfile();
+  const { state, dispatch } = useProfile();
 
-  // Check if auth and auth.user are defined
-  const isLoggedIn = auth && auth.user;
-  // const avatar = auth?.user?.avatar ?? null;
-  const avatar = state?.avatar || auth?.user?.avatar || null;
+  // State to hold derived values
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {
+    // Check if auth and auth.user are defined
+    const loggedIn = auth && auth.user;
+    setIsLoggedIn(loggedIn);
+
+    // Determine the avatar source
+    const avatarSource = state?.avatar || auth?.user?.avatar || null;
+    setAvatar(avatarSource);
+
+    // Logging for debugging purposes
+    console.log("Avatar in state:", state?.avatar);
+  }, [auth, state]);
 
   const handleLogout = () => {
-    setAuth({});
-    navigate("/login");
+    setAuth({}); // Clear auth state
+
+    dispatch({
+      type: actions.profile.LOGOUT_USER_DATA,
+    });
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 0);
   };
 
   return (

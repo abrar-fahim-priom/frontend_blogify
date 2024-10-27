@@ -51,7 +51,7 @@ export default function SingleBlogContent({ singleBlog }) {
 
         {/* <!-- Tags --> */}
         <ul className="tags">
-          {(singleBlog?.tags?.split(",") ?? []).map((tag, index) => (
+          {(singleBlog?.tags ?? []).map((tag, index) => (
             <li key={index}>{tag.trim()}</li>
           ))}
         </ul>

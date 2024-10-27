@@ -22,6 +22,10 @@ const profileReducer = (state, action) => {
       };
     }
 
+    case actions.profile.LOGOUT_USER_DATA: {
+      return initialState;
+    }
+
     case actions.profile.DATA_FETCHED: {
       return {
         ...state,

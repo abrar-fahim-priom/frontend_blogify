@@ -3,7 +3,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { actions } from "../actions";
 import Header from "../Common/Header";
 import BlogList from "../Components/Blogs/BlogList";
-import Sidebar from "../Components/Blogs/Sidebar";
 import useAxios from "../Hooks/useAxios";
 import { useBlog } from "../Hooks/useBlog";
 
@@ -67,6 +66,7 @@ export default function HomePage() {
   return (
     <div className="bg-[#030317] text-white">
       <Header />
+
       <main>
         <section>
           <div className="container">
@@ -82,7 +82,6 @@ export default function HomePage() {
                   <BlogList blogs={state.blogs} />
                 </InfiniteScroll>
               </div>
-              <Sidebar />
             </div>
           </div>
         </section>

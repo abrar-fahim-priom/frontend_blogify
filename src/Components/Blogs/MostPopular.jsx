@@ -27,7 +27,7 @@ export default function MostPopular() {
             data: response.data.blogs,
           });
 
-          console.log(state.most_popular);
+          // console.log(state.most_popular);
         }
       } catch (error) {
         console.log(error);

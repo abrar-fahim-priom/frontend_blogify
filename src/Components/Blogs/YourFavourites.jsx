@@ -26,7 +26,7 @@ export default function YourFavourites() {
             data: response.data.blogs,
           });
 
-          console.log(state.favourites);
+          // console.log(state.favourites);
         }
       } catch (error) {
         console.log(error);
@@ -38,6 +38,8 @@ export default function YourFavourites() {
     };
 
     fetchMostPopular();
+
+    console.log(state?.favourites);
   }, []);
   return (
     <>
@@ -56,7 +58,10 @@ export default function YourFavourites() {
                 >
                   {blog?.title}
                 </Link>
-                <p className="text-slate-600 text-sm">{blog?.tags}</p>
+
+                <p className="text-slate-600 text-sm">
+                  {blog?.tags?.join(", ")}
+                </p>
               </li>
             ))}
         </ul>

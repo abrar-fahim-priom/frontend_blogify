@@ -90,7 +90,7 @@ export default function BlogCard({ myBlogs, blog }) {
               </div>
 
               <div className="text-sm px-2 py-1 text-slate-700">
-                <span>{blog?.likes.length} Likes</span>
+                <span>{blog?.likes.length || 0} Likes</span>
               </div>
             </div>
 

@@ -4,7 +4,7 @@ import ProfileImage from "./ProfileImage";
 
 export default function ProfileInfo({ state, user }) {
   // const { state } = useProfile();
-  console.log(state);
+  // console.log(state);
   return (
     <>
       {/* <!-- profile info --> */}
@@ -20,7 +20,7 @@ export default function ProfileInfo({ state, user }) {
           </h3>
           <p className="leading-[231%] lg:text-lg">{state?.email}</p>
         </div>
-        {console.log(state?.bio)}
+        {/* {console.log(state?.bio)} */}
         <Bio user={user} bioState={state?.bio} />
         <div className="w-3/4 border-b border-[#3F3F3F] py-6 lg:py-8"></div>
       </div>

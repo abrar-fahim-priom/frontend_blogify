@@ -3,14 +3,11 @@ import BlogCard from "./BlogCard";
 export default function BlogList({ myBlogs, blogs }) {
   // console.log(blogs);
   return (
-    <>
+    <div>
       {!!blogs &&
-        blogs
-          // .slice() // Create a shallow copy of the array to avoid mutating the original array
-          // .reverse()
-          .map((blog) => (
-            <BlogCard key={blog.id} myBlogs={myBlogs} blog={blog} />
-          ))}{" "}
-    </>
+        blogs.map((blog) => (
+          <BlogCard key={blog.id} myBlogs={myBlogs} blog={blog} />
+        ))}
+    </div>
   );
 }

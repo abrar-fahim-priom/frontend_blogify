@@ -15,13 +15,15 @@ export default function ProfilePage() {
   const { auth } = useAuth();
   const location = useLocation();
 
+  // console.log(state?.avatar);
+
   const { authorId, setAuthorId } = useAuthor(); // Get authorId from context
   const navigationAuthorId = location.state?.passAuthorId;
 
-  console.log(navigationAuthorId);
+  // console.log(navigationAuthorId);
   const profileId = navigationAuthorId || authorId || auth?.user?.id;
 
-  console.log(auth?.user?.id);
+  // console.log(auth?.user?.id);
 
   // const profileId = authorId || auth?.user?.id; // Determine the profile ID to fetch
 
@@ -29,7 +31,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(authorId);
+  // console.log(authorId);
 
   useEffect(() => {
     if (profileId === auth?.user?.id) {
