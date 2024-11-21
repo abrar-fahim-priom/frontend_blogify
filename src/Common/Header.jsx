@@ -52,7 +52,7 @@ export default function Header() {
 
         {/* Actions */}
         <div>
-          <ul className="flex items-center space-x-5">
+          <ul className="flex  items-center space-x-5">
             {isLoggedIn ? (
               <>
                 <li>

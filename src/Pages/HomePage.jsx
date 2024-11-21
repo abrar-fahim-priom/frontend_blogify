@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { actions } from "../actions";
 import Header from "../Common/Header";
+import SkeletonLoader from "../Common/SkeletonLoader";
 import BlogList from "../Components/Blogs/BlogList";
 import useAxios from "../Hooks/useAxios";
 import { useBlog } from "../Hooks/useBlog";
@@ -10,9 +11,11 @@ export default function HomePage() {
   const { state, dispatch } = useBlog();
   const { api } = useAxios();
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Controls loading indicator
 
-  // Function to fetch blogs based on the page number
+  // Function to fetch blogs
   const fetchBlogs = async (pageNumber = 1) => {
+    setIsLoading(true); // Start loading
     try {
       const response = await api.get(
         `${
@@ -26,9 +29,10 @@ export default function HomePage() {
         dispatch({
           type: actions.blog.DATA_FETCHED,
           data: { blogs, total, page, limit },
-          append: pageNumber > 1, // Only append if page number is greater than 1
+          append: pageNumber > 1, // Append if fetching additional pages
         });
 
+        // Determine if there's more data to fetch
         if (state.blogs.length + blogs.length >= total) {
           setHasMore(false);
         }
@@ -38,28 +42,24 @@ export default function HomePage() {
         type: actions.blog.DATA_FETCH_ERROR,
         error: error.message,
       });
+    } finally {
+      setIsLoading(false); // Stop loading (always executes)
     }
   };
 
-  // Effect to fetch initial data and reset state when the component mounts
+  // Initial data fetching
   useEffect(() => {
-    // Reset the state and fetch initial blogs
     dispatch({ type: actions.blog.DATA_FETCHING });
     fetchBlogs(1); // Fetch the first page
-    setHasMore(true); // Ensure hasMore is true on initial load
-
-    // Cleanup function to reset state if needed (optional)
-    return () => {
-      dispatch({ type: actions.blog.RESET_BLOG_STATE });
-    };
+    setHasMore(true); // Reset the `hasMore` state
   }, [dispatch]);
 
-  // Function to handle fetching next blogs for infinite scroll
+  // Fetch the next set of blogs for infinite scrolling
   const fetchNextBlogs = () => {
     if (state.page < Math.ceil(state.total / state.limit)) {
       fetchBlogs(state.page + 1);
     } else {
-      setHasMore(false);
+      setHasMore(false); // No more data to fetch
     }
   };
 
@@ -72,15 +72,28 @@ export default function HomePage() {
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
               <div className="space-y-3 md:col-span-5">
-                <InfiniteScroll
-                  dataLength={state.blogs.length}
-                  next={fetchNextBlogs}
-                  hasMore={hasMore}
-                  loader={<div>Loading more blogs...</div>}
-                  endMessage={<div>No more blogs to show</div>}
-                >
-                  <BlogList blogs={state.blogs} />
-                </InfiniteScroll>
+                {/* Show skeleton loader while initially loading */}
+                {isLoading && state.blogs.length === 0 ? (
+                  <SkeletonLoader />
+                ) : (
+                  <InfiniteScroll
+                    dataLength={state.blogs.length}
+                    next={fetchNextBlogs}
+                    hasMore={hasMore}
+                    loader={
+                      <div className="flex justify-center my-4">
+                        <SkeletonLoader /> {/* Loader for infinite scroll */}
+                      </div>
+                    }
+                    endMessage={
+                      <div className="flex m-3 items-center justify-center">
+                        No more blogs to show
+                      </div>
+                    }
+                  >
+                    <BlogList blogs={state.blogs} />
+                  </InfiniteScroll>
+                )}
               </div>
             </div>
           </div>

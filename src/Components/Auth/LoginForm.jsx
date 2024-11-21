@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Field from "../../Common/Field";
@@ -15,12 +15,14 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const { auth, setAuth } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("Auth state updated:", auth);
   }, [auth]);
 
   const submitForm = async (formData) => {
+    setIsLoading(true); // Set loading state to true
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
@@ -45,6 +47,8 @@ export default function LoginForm() {
         type: "random",
         message: `Email with ${formData.email} is not found`,
       });
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
   };
 
@@ -91,15 +95,46 @@ export default function LoginForm() {
         <div className="mb-6">
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white p-3 rounded-md hover:bg-indigo-700 transition-all duration-200"
+            className={`w-full text-white p-3 rounded-md transition-all duration-200 ${
+              isLoading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-white mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Logging in...
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
         </div>
       </Field>
 
       <p className="text-center">
-        Dont have an account?{" "}
+        Don't have an account?{" "}
         <Link to="/register" className="text-indigo-600 hover:underline">
           Register
         </Link>
