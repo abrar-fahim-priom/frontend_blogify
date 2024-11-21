@@ -1,4 +1,4 @@
-import Logo from "../../assets/logo.svg";
+import Logo from "../../assets/blogify-logo.png";
 
 export default function Footer() {
   return (

@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth";
 import { useProfile } from "../Hooks/useProfile";
 import { actions } from "../actions";
+import logo from "../assets/blogify-logo.png";
 import search from "../assets/icons/search.svg";
-import logo from "../assets/logo.svg";
 
 export default function Header() {
   const { auth, setAuth } = useAuth();

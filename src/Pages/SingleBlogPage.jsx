@@ -55,8 +55,8 @@ export default function SingleBlogPage() {
             singleBlog={singleBlog}
           />
         ) : (
-          <div className="m-5 font-medium text-xl pb-6 text-center">
-            Please Login to access comment section
+          <div className="m-5 font-medium text-xl mt-10 pb-6 text-center">
+            Please Login to access reaction and comment
           </div>
         )}
       </main>

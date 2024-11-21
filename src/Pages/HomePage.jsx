@@ -4,6 +4,7 @@ import { actions } from "../actions";
 import Header from "../Common/Header";
 import SkeletonLoader from "../Common/SkeletonLoader";
 import BlogList from "../Components/Blogs/BlogList";
+import Footer from "../Components/Blogs/Footer";
 import useAxios from "../Hooks/useAxios";
 import { useBlog } from "../Hooks/useBlog";
 
@@ -98,6 +99,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        <Footer />
       </main>
     </div>
   );
