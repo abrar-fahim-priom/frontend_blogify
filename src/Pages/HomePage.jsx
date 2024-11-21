@@ -5,6 +5,8 @@ import Header from "../Common/Header";
 import SkeletonLoader from "../Common/SkeletonLoader";
 import BlogList from "../Components/Blogs/BlogList";
 import Footer from "../Components/Blogs/Footer";
+import MostPopular from "../Components/Blogs/MostPopular";
+import Favourites from "../Components/Blogs/YourFavourites";
 import useAxios from "../Hooks/useAxios";
 import { useBlog } from "../Hooks/useBlog";
 
@@ -12,11 +14,11 @@ export default function HomePage() {
   const { state, dispatch } = useBlog();
   const { api } = useAxios();
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); // Controls loading indicator
+  const [isLoading, setIsLoading] = useState(false);
 
   // Function to fetch blogs
   const fetchBlogs = async (pageNumber = 1) => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     try {
       const response = await api.get(
         `${
@@ -30,10 +32,9 @@ export default function HomePage() {
         dispatch({
           type: actions.blog.DATA_FETCHED,
           data: { blogs, total, page, limit },
-          append: pageNumber > 1, // Append if fetching additional pages
+          append: pageNumber > 1,
         });
 
-        // Determine if there's more data to fetch
         if (state.blogs.length + blogs.length >= total) {
           setHasMore(false);
         }
@@ -44,23 +45,21 @@ export default function HomePage() {
         error: error.message,
       });
     } finally {
-      setIsLoading(false); // Stop loading (always executes)
+      setIsLoading(false);
     }
   };
 
-  // Initial data fetching
   useEffect(() => {
     dispatch({ type: actions.blog.DATA_FETCHING });
-    fetchBlogs(1); // Fetch the first page
-    setHasMore(true); // Reset the `hasMore` state
+    fetchBlogs(1);
+    setHasMore(true);
   }, [dispatch]);
 
-  // Fetch the next set of blogs for infinite scrolling
   const fetchNextBlogs = () => {
     if (state.page < Math.ceil(state.total / state.limit)) {
       fetchBlogs(state.page + 1);
     } else {
-      setHasMore(false); // No more data to fetch
+      setHasMore(false);
     }
   };
 
@@ -72,8 +71,8 @@ export default function HomePage() {
         <section>
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+              {/* Blog Listing Section */}
               <div className="space-y-3 md:col-span-5">
-                {/* Show skeleton loader while initially loading */}
                 {isLoading && state.blogs.length === 0 ? (
                   <SkeletonLoader />
                 ) : (
@@ -83,7 +82,7 @@ export default function HomePage() {
                     hasMore={hasMore}
                     loader={
                       <div className="flex justify-center my-4">
-                        <SkeletonLoader /> {/* Loader for infinite scroll */}
+                        <SkeletonLoader />
                       </div>
                     }
                     endMessage={
@@ -95,6 +94,19 @@ export default function HomePage() {
                     <BlogList blogs={state.blogs} />
                   </InfiniteScroll>
                 )}
+              </div>
+
+              {/* Sidebar Section */}
+              <div className="md:col-span-2 space-y-6">
+                {/* Most Popular Component */}
+                <div className=" p-4 rounded-lg">
+                  <MostPopular /> {/* Add the Most Popular component */}
+                </div>
+
+                {/* Your Favourites Section */}
+                <div className=" p-4 rounded-lg">
+                  <Favourites /> {/* Add the Favourites component */}
+                </div>
               </div>
             </div>
           </div>

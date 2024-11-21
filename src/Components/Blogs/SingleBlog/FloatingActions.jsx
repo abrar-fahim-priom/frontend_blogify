@@ -21,14 +21,8 @@ export default function FloatingActions({
   const [favourite, setFavourite] = useState(false);
   const [likeLength, setLikeLength] = useState(0);
 
-  console.log(state.favourites);
-
   useEffect(() => {
-    console.log(auth?.user?.id);
     if (singleBlog?.likes && auth?.user?.id) {
-      console.log(singleBlog?.likes); // THIS PRINTS['66c2f6630aad847b524a01c0']
-
-      console.log(auth?.user?.id); // THIS PRINTS 66c2f6630aad847b524a01c0   (NO COLLON)
       const isLiked = singleBlog.likes.includes(auth.user.id);
       setLiked(isLiked);
     }
@@ -43,19 +37,25 @@ export default function FloatingActions({
     }
   }, [singleBlog, auth, state.favourites]);
 
+  const handleAction = (action) => {
+    if (!auth || !auth.user) {
+      alert("Please log in to perform this action.");
+      return false;
+    }
+    return true;
+  };
+
   const handleLiked = async () => {
+    if (!handleAction("like")) return;
+
     try {
       const response = await api.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/blogs/${singleBlog.id}/like`
       );
-
-      console.log(singleBlog);
       if (response.status === 200) {
         const { isLiked, likes } = response.data;
-        console.log(response.data.likes);
-
         setLiked(isLiked);
-        setLikeLength(likes.length); // Update the like count based on the response
+        setLikeLength(likes.length);
       }
     } catch (error) {
       console.error("Error liking the blog:", error);
@@ -63,20 +63,20 @@ export default function FloatingActions({
   };
 
   const handleFavourite = async () => {
+    if (!handleAction("favourite")) return;
+
     try {
       const response = await api.patch(
         `${import.meta.env.VITE_SERVER_BASE_URL}/blogs/${
           singleBlog.id
         }/favourite`
       );
-
       if (response.status === 200) {
-        console.log(response.data);
         const { isFavourite } = response.data;
         setFavourite(isFavourite);
       }
     } catch (error) {
-      console.error("Error liking the blog:", error);
+      console.error("Error adding blog to favourites:", error);
     }
   };
 
