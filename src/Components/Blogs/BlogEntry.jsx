@@ -34,7 +34,9 @@ export default function BlogEntry({ onUpdate }) {
 
       if (blogEdit.thumbnail) {
         setPreviewUrl(
-          `http://localhost:3000/uploads/blog/${blogEdit.thumbnail}`
+          `${import.meta.env.VITE_SERVER_BASE_URL}/uploads/blog/${
+            blogEdit.thumbnail
+          }`
         );
       }
     }
@@ -71,8 +73,8 @@ export default function BlogEntry({ onUpdate }) {
 
       const method = blogEdit ? "patch" : "post";
       const url = blogEdit
-        ? `http://localhost:3000/blogs/${blogEdit.id}`
-        : `http://localhost:3000/blogs/`;
+        ? `${import.meta.env.VITE_SERVER_BASE_URL}/blogs/${blogEdit.id}`
+        : `${import.meta.env.VITE_SERVER_BASE_URL}/blogs`;
 
       await api({
         method,
